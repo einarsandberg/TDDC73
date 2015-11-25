@@ -82,6 +82,10 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count)
             {
+                if (s.toString().equals(""))
+                {
+                    searchField.setText("€/€");
+                }
                 // only do this if string is not empty
                 if (!(s.toString().equals("")) && s.charAt(0) == '/')
                 {
