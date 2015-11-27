@@ -21,8 +21,5 @@ public class MainActivity extends AppCompatActivity {
         setContentView(linearLayout);
 
         Log.d(TAG, "HEJ PÅ DIG");
-
-
-
     }
 }
