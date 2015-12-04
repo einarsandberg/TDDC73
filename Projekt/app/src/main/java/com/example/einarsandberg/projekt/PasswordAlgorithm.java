@@ -4,7 +4,10 @@ import java.util.*;
  * Created by einarsandberg on 2015-12-04.
  */
 
-/* Strength levels is from 0 to 4
+/*
+Very simple password strength algorithm.
+
+Strength levels is from 0 to 4
 
 A password is 0 if: <7 characters
               1 if: only lowercase OR uppercase, no numbers, no symbols
@@ -13,7 +16,7 @@ A password is 0 if: <7 characters
               4 if: Lowercase AND uppercase AND numbers AND symbols
 
 States determine whether there already is an equal character before,
-i.e password will not be stronger just by adding more numbers;
+i.e password will not be stronger just by adding more numbers or characters etc;
  */
 public class PasswordAlgorithm
 {

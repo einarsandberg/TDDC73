@@ -14,6 +14,7 @@ public class PasswordStrengthBar extends ProgressBar
     Context context;
     private String text;
     Paint paint;
+    private int progress;
     public PasswordStrengthBar(Context theContext, AttributeSet attrs, int defStyle)
     {
         super(theContext, attrs, defStyle);
@@ -31,6 +32,7 @@ public class PasswordStrengthBar extends ProgressBar
     {
         Log.d(TAG, text);
         super.onDraw(canvas);
+        setProgress(progress);
         canvas.drawText(text, 100, 100, paint);
 
     }
@@ -41,9 +43,10 @@ public class PasswordStrengthBar extends ProgressBar
         Log.d("HEJ: ", String.valueOf(MeasureSpec.getSize(widthMeasureSpec)));
     }
 
-    public void setText(String theText)
+    public void setBar(String theText, int theProgress)
     {
         text = theText;
+        progress = theProgress;
     }
 
 }
