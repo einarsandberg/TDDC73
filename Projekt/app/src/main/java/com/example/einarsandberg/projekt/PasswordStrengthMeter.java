@@ -14,6 +14,7 @@ public class PasswordStrengthMeter extends LinearLayout
     EditText passwordField;
     Context context;
     LinearLayout.LayoutParams fieldParams;
+    PasswordStrengthBar pwBar;
     public PasswordStrengthMeter(Context theContext)
     {
         super(theContext);
@@ -23,7 +24,7 @@ public class PasswordStrengthMeter extends LinearLayout
     public void init()
     {
         this.setOrientation(VERTICAL);
-
+        pwBar = new PasswordStrengthBar(context, null, android.R.attr.progressBarStyleHorizontal);
         fieldParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
         passwordField = new EditText(context);
@@ -45,5 +46,6 @@ public class PasswordStrengthMeter extends LinearLayout
             }
         });
         addView(passwordField);
+        addView(pwBar);
     }
 }
