@@ -1,29 +1,46 @@
 package com.example.einarsandberg.projekt;
-
+import java.util.*;
 /**
  * Created by einarsandberg on 2015-12-04.
  */
 
-/* Strength levels is from 1 to 4
+/* Strength levels is from 0 to 4
 
-A password is 1 if: only lowercase OR uppercase, no numbers, no symbols
+A password is 0 if: <7 characters
+              1 if: only lowercase OR uppercase, no numbers, no symbols
               2 if: Lowercase AND uppercase, no numbers, no symbols
               3 if: Lowercase AND uppercase AND numbers OR symbols
               4 if: Lowercase AND uppercase AND numbers AND symbols
+
+States determine whether there already is an equal character before,
+i.e password will not be stronger just by adding more numbers;
  */
 public class PasswordAlgorithm
 {
-    private int strengthLevel;
-    private String password;
-    public PasswordAlgorithm(String thePassword)
+    private List<String> strengthLevels;
+    boolean caseState;
+    boolean numberState;
+    boolean symbolState;
+    public PasswordAlgorithm()
     {
-        password = thePassword;
-        strengthLevel = 0;
+        strengthLevels = new ArrayList<String>();
+        strengthLevels.add("Too short");
+        strengthLevels.add("Very weak");
+        strengthLevels.add("Weak");
+        strengthLevels.add("Strong");
+        strengthLevels.add("Very strong");
 
     }
 
-    public int getStrength()
+    public String getStrengthLevel(String password)
     {
+        caseState = false;
+        numberState = false;
+        symbolState = false;
+        int strengthLevel = 0;
+        if (password.length() < 7)
+            return strengthLevels.get(strengthLevel);
+
         // Only upper case or lower case?
         if (password.equals(password.toLowerCase()) || password.equals(password.toUpperCase()))
         {
@@ -36,29 +53,36 @@ public class PasswordAlgorithm
             // contains upper case or lower case or symbols or numbers?
             for (int i = 0; i < password.length(); i++)
             {
-                // only need to check if lower case due to previous if-statement
-                if (Character.isLowerCase(password.charAt(i)))
+                if (strengthLevel == 4) // if max is reached
+                    break;
+                // only need to check if lower case due to previous if-statement before loop
+                // i.e contains both lower and upper case
+                if (!caseState && Character.isLowerCase(password.charAt(i)))
                 {
                     strengthLevel++;
+                    caseState = true;
                 }
-                else if (Character.isDigit(password.charAt(i)))
+                else if (!numberState && Character.isDigit(password.charAt(i)))
                 {
                     strengthLevel++;
+                    numberState = true;
                 }
                 else
                 {
                     // check if symbol
                     for (int k = 0; k < symbols.length(); k++)
                     {
-                        if (password.charAt(i) == symbols.charAt(k))
+                        if (!symbolState && password.charAt(i) == symbols.charAt(k))
                         {
                             strengthLevel++;
+                            symbolState = true;
                         }
                     }
                 }
+
             }
 
         }
-        return strengthLevel;
+        return strengthLevels.get(strengthLevel);
     }
 }

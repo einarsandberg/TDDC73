@@ -10,6 +10,7 @@ import android.util.Log;
  */
 public class PasswordStrengthBar extends ProgressBar
 {
+    private static final String TAG = "PasswordStrengthBar";
     Context context;
     private String text;
     Paint paint;
@@ -24,11 +25,11 @@ public class PasswordStrengthBar extends ProgressBar
         paint = new Paint();
         paint.setTextSize(50);
         paint.setColor(Color.BLUE);
-
-
     }
+    @Override
     protected void onDraw(Canvas canvas)
     {
+        Log.d(TAG, text);
         super.onDraw(canvas);
         canvas.drawText(text, 100, 100, paint);
 
@@ -40,7 +41,7 @@ public class PasswordStrengthBar extends ProgressBar
         Log.d("HEJ: ", String.valueOf(MeasureSpec.getSize(widthMeasureSpec)));
     }
 
-    private void setText(String theText)
+    public void setText(String theText)
     {
         text = theText;
     }
