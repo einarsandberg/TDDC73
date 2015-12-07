@@ -17,7 +17,7 @@ public class PasswordStrengthMeter extends LinearLayout
     Context context;
     LinearLayout.LayoutParams fieldParams;
     private PasswordStrengthBar pwBar;
-    private PasswordAlgorithm pwAlgorithm;
+    private PasswordAlgorithmInterface pwAlgorithm;
     public PasswordStrengthMeter(Context theContext)
     {
         super(theContext);
@@ -43,9 +43,9 @@ public class PasswordStrengthMeter extends LinearLayout
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.d(TAG, "HEJJJJJ");
-                pwBar.invalidate(); // draw bar again with new strength
+                pwBar.invalidate(); // must draw bar again with new strength
                 pwBar.setBar(pwAlgorithm.getStrengthLevel(s.toString()),
-                        getProgress(pwAlgorithm.getStrengthLevel(s.toString())));
+                        pwAlgorithm.getProgress(pwAlgorithm.getStrengthLevel(s.toString())));
                 Log.d(TAG, pwAlgorithm.getStrengthLevel(s.toString()));
             }
 
@@ -57,26 +57,5 @@ public class PasswordStrengthMeter extends LinearLayout
         addView(passwordField);
         addView(pwBar);
     }
-    private int getProgress(String strengthLevel)
-    {
-        switch (strengthLevel)
-        {
-            case "Too short":
-                return 20;
 
-            case "Very weak":
-                return 40;
-
-            case "Weak":
-                return 60;
-
-            case "Strong":
-                return 80;
-
-            case "Very strong":
-                return 100;
-
-        }
-        return 0;
-    }
 }

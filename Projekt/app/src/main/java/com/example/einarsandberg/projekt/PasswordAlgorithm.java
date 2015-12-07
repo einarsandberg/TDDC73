@@ -18,7 +18,7 @@ A password is 0 if: <7 characters
 States determine whether there already is an equal character before,
 i.e password will not be stronger just by adding more numbers or characters etc;
  */
-public class PasswordAlgorithm
+public class PasswordAlgorithm implements PasswordAlgorithmInterface
 {
     private List<String> strengthLevels;
     boolean caseState;
@@ -52,7 +52,7 @@ public class PasswordAlgorithm
         else
         {
             strengthLevel++;
-            String symbols = "/*!@#$%^&*()\"{}_[]|\\?/<>,.";
+            String symbols = "/*!@#$%^&*()\"{}_[]|\\?/<>,.=-";
             // contains upper case or lower case or symbols or numbers?
             for (int i = 0; i < password.length(); i++)
             {
@@ -87,5 +87,28 @@ public class PasswordAlgorithm
 
         }
         return strengthLevels.get(strengthLevel);
+    }
+
+    public int getProgress(String strengthLevel)
+    {
+        switch (strengthLevel)
+        {
+            case "Too short":
+                return 20;
+
+            case "Very weak":
+                return 40;
+
+            case "Weak":
+                return 60;
+
+            case "Strong":
+                return 80;
+
+            case "Very strong":
+                return 100;
+
+        }
+        return 0;
     }
 }
