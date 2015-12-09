@@ -51,6 +51,7 @@ public class InteractiveSearcher extends EditText
     private InputStream in;
     ListPopupWindow popupWindow;
     ItemAdapter itemAdapter;
+    int numOfResults;
 
     public InteractiveSearcher(Context theContext)
     {
@@ -58,7 +59,10 @@ public class InteractiveSearcher extends EditText
         context = theContext;
         init();
     }
-
+    public void setNumOfResults(int theNumOfResults)
+    {
+        numOfResults = theNumOfResults;
+    }
     private void init()
     {
         searchID = 0;
@@ -75,7 +79,6 @@ public class InteractiveSearcher extends EditText
                 setText(itemAdapter.getItem(position).toString());
             }
         });
-
 
 
         this.addTextChangedListener(new TextWatcher() {
@@ -112,7 +115,6 @@ public class InteractiveSearcher extends EditText
     {
         try
         {
-            Log.d(TAG, retrievedString);
             JSONObject jsonObj = new JSONObject(retrievedString);
 
             JSONArray results = jsonObj.getJSONArray("result");
@@ -124,11 +126,22 @@ public class InteractiveSearcher extends EditText
             }
             else
             {
-                for (int i = 0; i < results.length(); i++)
+                if (results.length() <= numOfResults)
                 {
-                    names.add(results.get(i).toString());
+                    for (int i = 0; i < results.length(); i++)
+                    {
+                        names.add(results.get(i).toString());
+                    }
+                    searchMap.put(searchID, names);
                 }
-                searchMap.put(searchID, names);
+                else
+                {
+                    for (int i = 0; i < numOfResults; i++)
+                    {
+                        names.add(results.get(i).toString());
+                    }
+                    searchMap.put(searchID, names);
+                }
             }
         }
         catch(Exception e)
@@ -147,14 +160,10 @@ public class InteractiveSearcher extends EditText
             try {
                 URL url = new URL("http://flask-afteach.rhcloud.com/getnames/" + searchID + "/" + theSearchString[0]);
                 searchID++; // new id for each search
-                Log.d(TAG, url.toString());
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.connect();
                 in = new BufferedInputStream(urlConnection.getInputStream());
                 returnedText = readStream(in);
-
-                Log.d(TAG, "TJO");
-
 
             } catch (Exception e) {
                 Log.d(TAG, "Error initializing connection");
@@ -185,7 +194,6 @@ public class InteractiveSearcher extends EditText
         {
             // parse json data
             parseObject(data);
-            Log.d(TAG, "HEJ");
 
             itemAdapter = new ItemAdapter(context, searchMap.get(searchID));
             popupWindow.setAdapter(itemAdapter);

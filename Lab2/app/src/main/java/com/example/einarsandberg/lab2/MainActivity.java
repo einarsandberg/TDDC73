@@ -22,13 +22,20 @@ public class MainActivity extends AppCompatActivity
     ExpandableListAdapter listAdapter;
     ExpandableListView listView;
     EditText searchField;
-    int prevExpandedPosition = -1;
-    int prevSelectedChild = -1;
-    int prevSelectedGroup = -1;
+    int prevExpandedPosition;
+    int prevSelectedChild;
+    int prevSelectedGroup;
+
+    static final int POSSIBLE_CHILD = -1;
+    static final int NO_POSSIBLE_CHILD = -2;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
+        prevExpandedPosition = -1;
+        prevSelectedChild = -1;
+        prevSelectedGroup = -1;
         setContentView(R.layout.activity_main);
 
         searchField = (EditText) findViewById(R.id.search);
@@ -43,6 +50,15 @@ public class MainActivity extends AppCompatActivity
         listView.setAdapter(listAdapter);
         listView.setFocusableInTouchMode(true);
         listView.setItemsCanFocus(true);
+
+        listView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
+            @Override
+            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+                searchField.setText("/" + titles.get(groupPosition) + "/");
+                return true;
+            }
+        });
+
         listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
@@ -53,115 +69,97 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+
         listView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
-            public void onGroupExpand(int groupPosition)
-            {
+            public void onGroupExpand(int groupPosition) {
 
-                prevExpandedPosition = groupPosition;
+               // prevSelectedGroup = groupPosition;
                 listView.clearChoices();
             }
         });
 
-        listView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener()
-        {
-            public void onGroupCollapse(int groupPosition)
-            {
+        listView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            public void onGroupCollapse(int groupPosition) {
                 listView.clearChoices();
+                prevSelectedChild = -1;
             }
 
         });
 
         searchField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after)
-            {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count)
             {
-                // only do this if string is not empty
+
                 if (!(s.toString().equals("")) && s.charAt(0) == '/')
                 {
                     String groupName = getGroupName(s.toString());
                     String childName = getChildName(s.toString());
+                    int childPosition;
                     int groupPosition = getGroupPosition(groupName);
-                    int childPosition = -1;
-
                     // if group matches or can match
-                    if (groupPosition != -1)
+                    if (!groupName.equals(""))
                     {
-                        listView.expandGroup(groupPosition);
-                        searchField.setBackgroundColor(Color.parseColor("#ffffff"));
-                        // if there is text after second "/"
-                        if (!childName.equals("NO_POSSIBLE_CHILD"))
-                        {
-                            // try getting position
+
+                        if (groupPosition != -1) {
+                            listView.expandGroup(groupPosition);
+                            searchField.setBackgroundColor(Color.parseColor("#ffffff"));
                             childPosition = getChildPosition(groupName, childName);
-                            // child matches or can match one of the children
-                            if (childPosition != -1)
-                            {
-                                int i = listView.getFlatListPosition(
-                                        ExpandableListView.getPackedPositionForChild(groupPosition, childPosition));
-                                listView.setItemChecked(i, true);
+                            // there is a match
+                            if (childPosition > POSSIBLE_CHILD) {
+
                                 searchField.setBackgroundColor(Color.parseColor("#ffffff"));
-                                prevSelectedGroup = groupPosition;
                                 prevSelectedChild = childPosition;
+                                prevSelectedGroup = groupPosition;
+                                int i = listView.getFlatListPosition(
+                                        ExpandableListView.getPackedPositionForChild(prevSelectedGroup, prevSelectedChild));
+                                listView.setItemChecked(i, true);
                             }
-                            // child does not match and can not match any of the children
-                            else // childPosition == -1
-                            {
-                                try
+                            // there is a possible match
+                            else if (childPosition == POSSIBLE_CHILD) {
+                                searchField.setBackgroundColor(Color.parseColor("#ffffff"));
+                                if (prevSelectedChild != -1)
                                 {
+
                                     int i = listView.getFlatListPosition(
                                             ExpandableListView.getPackedPositionForChild(prevSelectedGroup, prevSelectedChild));
-                                    listView.setItemChecked(i, false);
-                                }
-                                catch (Exception e)
-                                {
-                                    e.printStackTrace();
-                                }
-                                // only mark if the user has written something after second "/"
-                                if (!childName.equals(""))
-                                {
-                                    searchField.setBackgroundColor(Color.RED);
-                                    listView.collapseGroup(prevExpandedPosition);
+                                    listView.setItemChecked(i, true);
                                 }
 
                             }
-
-                        }
-                        // there is no text after second "/" or there is no "/"
-                        else
-                        {
-
-                            int i = listView.getFlatListPosition(
-                                    ExpandableListView.getPackedPositionForChild(groupPosition, 0));
-                            listView.setItemChecked(i, true);
-                            searchField.setBackgroundColor(Color.parseColor("#ffffff"));
-                        }
-
-                    }
-                    // group doesn't exist and can not possibly exist
-                    else if (groupPosition == -1)
-                    {
-                        listView.collapseGroup(prevExpandedPosition);
-                        // if there is text
-                        if (!groupName.equals(""))
+                            // no possible match
+                            else if (childPosition == NO_POSSIBLE_CHILD) {
+                                searchField.setBackgroundColor(Color.RED);
+                                listView.collapseGroup(groupPosition);
+                            }
+                        } else // groupPosition == -1, no possible group
                         {
                             searchField.setBackgroundColor(Color.RED);
+                            listView.clearChoices();
                         }
                     }
-
+                    else
+                    {
+                        searchField.setBackgroundColor(Color.parseColor("#ffffff"));
+                    }
                 }
+
+                else if (s.toString().equals(""))
+                {
+                    searchField.setBackgroundColor(Color.RED);
+                }
+
 
             }
 
             @Override
-            public void afterTextChanged(Editable s)
-            {
+            public void afterTextChanged(Editable s) {
 
             }
         });
@@ -188,6 +186,7 @@ public class MainActivity extends AppCompatActivity
         //add some children
         kebabChildren.add("Kebabrulle");
         kebabChildren.add("Kebabtallrik");
+        kebabChildren.add("Kebabrulle");
         pizzaChildren.add("Margarita");
         pizzaChildren.add("Vesuvio");
         pizzaChildren.add("Hawaii");
@@ -226,19 +225,15 @@ public class MainActivity extends AppCompatActivity
         {
             s = s.substring(1, s.length());
 
-            if (s.contains("/")) {
+            if (s.contains("/"))
+            {
                 int i = s.indexOf("/");
                 s = s.substring(i+1, s.length());
-                // if there is a second "/" but no child
-                if (s.equals(""))
-                {
-                    return "NO_POSSIBLE_CHILD";
-                }
             }
             // no child
             else
             {
-                return "NO_POSSIBLE_CHILD";
+                return "";
             }
         }
         return s;
@@ -263,20 +258,33 @@ public class MainActivity extends AppCompatActivity
 
     private int getChildPosition(String group, String child)
     {
-        int childPosition = -1;
+        int childPosition = -2; // -1 will be returned if no possibility of match
         // check if there is a child in the text field, and get its position if so
-        if (!child.equals(""))
+        if (child.equals(""))
+            childPosition = POSSIBLE_CHILD;
+
+        else
         {
             if (children.get(group) != null)
             {
                 for (int i = 0; i < children.get(group).size(); i++)
                 {
-                    if (children.get(group).get(i).startsWith(child))
+                    // match
+                    if (children.get(group).get(i).equals(child))
                     {
                         childPosition = i;
                         break;
                     }
+                    else if (children.get(group).get(i).startsWith(child))
+                    {
+                        childPosition = POSSIBLE_CHILD;
+                    }
                 }
+
+            }
+            else
+            {
+                childPosition = NO_POSSIBLE_CHILD;
             }
         }
         return childPosition;

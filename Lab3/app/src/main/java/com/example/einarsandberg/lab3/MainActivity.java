@@ -16,10 +16,9 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout linearLayout = new LinearLayout(this);
         InteractiveSearcher searcher = new InteractiveSearcher(this);
+        searcher.setNumOfResults(10);
         linearLayout.addView(searcher);
 
         setContentView(linearLayout);
-
-        Log.d(TAG, "HEJ PÅ DIG");
     }
 }
