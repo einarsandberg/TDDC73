@@ -34,7 +34,6 @@ public class PasswordStrengthBar extends ProgressBar
         super.onDraw(canvas);
         setProgress(progress);
         canvas.drawText(text, 100, 100, paint);
-
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)

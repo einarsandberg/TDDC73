@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import org.json.*;
@@ -66,6 +67,16 @@ public class InteractiveSearcher extends EditText
                 ViewGroup.LayoutParams.WRAP_CONTENT));
         popupWindow = new ListPopupWindow(context);
         popupWindow.setAnchorView(this);
+
+        popupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                setText(itemAdapter.getItem(position).toString());
+            }
+        });
+
+
 
         this.addTextChangedListener(new TextWatcher() {
             @Override
@@ -201,5 +212,10 @@ public class InteractiveSearcher extends EditText
             return sb.toString();
         }
     }
+ /*   @Override
+    public void setText(CharSequence text, BufferType bufferType)
+    {
+        super.setText(text, BufferType.EDITABLE);
+    }*/
 
 }

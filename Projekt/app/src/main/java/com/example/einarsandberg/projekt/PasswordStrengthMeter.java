@@ -1,5 +1,6 @@
 package com.example.einarsandberg.projekt;
 import android.text.Editable;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ public class PasswordStrengthMeter extends LinearLayout
         this.setOrientation(VERTICAL);
 
         pwBar = new PasswordStrengthBar(context, null, android.R.attr.progressBarStyleHorizontal);
+        
         pwBar.setBar("Too short", 20);
         fieldParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         pwAlgorithm = new PasswordAlgorithm();

@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
          // 1.1
 
-        /*LinearLayout layout = new LinearLayout(this);
+        LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
         Toolbar toolbar = new Toolbar(this);
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout.LayoutParams multLineParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams.MATCH_PARENT);
 
         multipleLineField.setLayoutParams(multLineParams);
 
@@ -71,11 +71,11 @@ public class MainActivity extends AppCompatActivity {
         layout.addView(ratingBar);
         layout.addView(multipleLineField);
         setContentView(layout);
-         */
+
 
         // 1.2
-
-       /* LinearLayout linearLayout = new LinearLayout(this);
+/*
+        LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
         GridLayout gridLayout = new GridLayout(this);
@@ -161,20 +161,9 @@ public class MainActivity extends AppCompatActivity {
         linearLayout.addView(gridLayout);
         setContentView(linearLayout);*/
 
+
         // 1.3
-
-        // http://justsimpleinfo.blogspot.se/2014/05/android-relativelayout-example.html
-
-
-       /* RelativeLayout relativeLayout = new RelativeLayout(this);
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT
-        );
-
-        relativeLayout.setLayoutParams(params);*/
-
+/*
         LinearLayout linearLayout = new LinearLayout(this);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -210,13 +199,6 @@ public class MainActivity extends AppCompatActivity {
         ImageView logo = new ImageView(this);
 
         logo.setImageResource(R.drawable.liu);
-
-
-
-
-
-
-
 
         goodBox = new CheckBox(this);
         veryGoodBox = new CheckBox(this);
@@ -373,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
         relativeLayout.addView(noBox2, noBox2Params);
         relativeLayout.addView(submit, buttonParams);
         linearLayout.addView(relativeLayout);
-        setContentView(linearLayout);
+        setContentView(linearLayout);*/
 
     }
 
