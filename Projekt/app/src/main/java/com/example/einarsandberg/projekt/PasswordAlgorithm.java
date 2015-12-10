@@ -32,7 +32,6 @@ public class PasswordAlgorithm implements PasswordAlgorithmInterface
         strengthLevels.add("Weak");
         strengthLevels.add("Strong");
         strengthLevels.add("Very strong");
-
     }
 
     public String getStrengthLevel(String password)

@@ -8,34 +8,73 @@ import android.widget.LinearLayout;
 import android.content.Context;
 import android.widget.EditText;
 import android.util.Log;
+import android.widget.TextView;
+import android.widget.RelativeLayout;
+import android.widget.Button;
+import android.view.Gravity;
 /**
  * Created by einarsandberg on 2015-12-02.
  */
-public class PasswordStrengthMeter extends LinearLayout
+public class PasswordStrengthMeter extends RelativeLayout
 {
     private static final String TAG = "PasswordStrengthMeter";
     EditText passwordField;
+    TextView password;
     Context context;
-    LinearLayout.LayoutParams fieldParams;
+    RelativeLayout.LayoutParams fieldParams;
+    RelativeLayout.LayoutParams passwordParams;
+    RelativeLayout.LayoutParams barParams;
+    RelativeLayout.LayoutParams buttonParams;
     private PasswordStrengthBar pwBar;
     private PasswordAlgorithmInterface pwAlgorithm;
+    Button button;
     public PasswordStrengthMeter(Context theContext)
     {
         super(theContext);
         context = theContext;
         init();
+        this.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT));
     }
     public void init()
     {
-        this.setOrientation(VERTICAL);
-
+        button = new Button(context);
+        button.setText("Submit");
+        password = new TextView(context);
+        password.setText("Password");
+        password.setId(3);
         pwBar = new PasswordStrengthBar(context, null, android.R.attr.progressBarStyleHorizontal);
-        
+
         pwBar.setBar("Too short", 20);
-        fieldParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+
+        passwordParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        passwordParams.addRule(RelativeLayout.ALIGN_LEFT, RelativeLayout.TRUE);
+        passwordParams.topMargin = 200;
+
+        fieldParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        fieldParams.addRule(RelativeLayout.RIGHT_OF, password.getId());
+        fieldParams.topMargin = 150;
+
         pwAlgorithm = new PasswordAlgorithm();
         passwordField = new EditText(context);
         passwordField.setLayoutParams(fieldParams);
+        barParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        pwBar.setLayoutParams(barParams);
+        barParams.addRule(RelativeLayout.BELOW, password.getId());
+        barParams.topMargin = 100;
+
+        buttonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+        buttonParams.topMargin = 500;
+        buttonParams.rightMargin = 500;
+        buttonParams.leftMargin = 500;
+
+
+
         passwordField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -56,8 +95,10 @@ public class PasswordStrengthMeter extends LinearLayout
 
             }
         });
-        addView(passwordField);
-        addView(pwBar);
+        addView(password, passwordParams);
+        addView(passwordField, fieldParams);
+        addView(pwBar, barParams);
+        addView(button, buttonParams);
     }
 
 }

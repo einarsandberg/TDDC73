@@ -5,63 +5,59 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.GridLayout;
+import android.widget.RelativeLayout;
+import android.widget.Toolbar;
+import android.widget.Button;
 public class MainActivity extends AppCompatActivity
 {
     LinearLayout linearLayout;
+    RelativeLayout relativeLayout;
+    RelativeLayout.LayoutParams relativeParams;
+    RelativeLayout.LayoutParams userNameParams;
+    RelativeLayout.LayoutParams editUserNameParams;
     PasswordStrengthMeter passwordStrengthMeter;
+    RelativeLayout.LayoutParams meterParams;
+
     EditText editUserName;
     TextView userName;
-    TextView password;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
+        userName = new TextView(this);
+        userName.setText("Username");
+        userName.setId(1);
+        editUserName = new EditText(this);
 
         linearLayout = new LinearLayout(this);
+        relativeLayout = new RelativeLayout(this);
 
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         passwordStrengthMeter = new PasswordStrengthMeter(this);
 
-        userName = new TextView(this);
-        password = new TextView(this);
-        userName.setText("Username: ");
-        password.setText("Password: ");
-        editUserName = new EditText(this);
+        relativeParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+        relativeLayout.setLayoutParams(relativeParams);
+
+        userNameParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        userNameParams.addRule(RelativeLayout.ALIGN_LEFT, RelativeLayout.TRUE);
+        userNameParams.topMargin = 50;
+
+        editUserNameParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+        editUserNameParams.addRule(RelativeLayout.RIGHT_OF, userName.getId());
 
 
-        GridLayout gridLayout = new GridLayout(this);
-        gridLayout.setRowCount(2);
-        gridLayout.setColumnCount(2);
-        GridLayout.Spec row1 = GridLayout.spec(0);
-        GridLayout.Spec row2 = GridLayout.spec(1);
-        GridLayout.Spec col1 = GridLayout.spec(0);
-        GridLayout.Spec col2 = GridLayout.spec(1);
+        relativeLayout.addView(userName, userNameParams);
+        relativeLayout.addView(editUserName, editUserNameParams);
+        relativeLayout.addView(passwordStrengthMeter);
 
-        GridLayout.LayoutParams obj1 = new GridLayout.LayoutParams(row1, col1);
-        obj1.width = GridLayout.LayoutParams.WRAP_CONTENT;
-
-        GridLayout.LayoutParams obj2 = new GridLayout.LayoutParams(row1,col2);
-        obj2.width = GridLayout.LayoutParams.MATCH_PARENT;
-
-        GridLayout.LayoutParams obj3 = new GridLayout.LayoutParams(row2,col1);
-        obj3.width = GridLayout.LayoutParams.WRAP_CONTENT;
-
-        GridLayout.LayoutParams obj4 = new GridLayout.LayoutParams(row2,col2);
-        obj4.width = GridLayout.LayoutParams.MATCH_PARENT;
-
-        gridLayout.addView(userName, obj1);
-        gridLayout.addView(editUserName, obj2);
-        gridLayout.addView(password, obj3);
-        gridLayout.addView(passwordStrengthMeter, obj4);
-
-
-
-
-
-        linearLayout.addView(gridLayout);
+        linearLayout.addView(relativeLayout, relativeParams);
         setContentView(linearLayout);
 
     }
