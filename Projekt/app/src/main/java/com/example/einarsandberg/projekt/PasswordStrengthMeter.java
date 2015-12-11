@@ -42,7 +42,7 @@ public class PasswordStrengthMeter extends RelativeLayout
         button.setText("Submit");
         password = new TextView(context);
         password.setText("Password");
-        password.setId(3);
+        password.setId(5);
         pwBar = new PasswordStrengthBar(context, null, android.R.attr.progressBarStyleHorizontal);
 
         pwBar.setBar("Too short", 20);
@@ -50,12 +50,13 @@ public class PasswordStrengthMeter extends RelativeLayout
         passwordParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
         passwordParams.addRule(RelativeLayout.ALIGN_LEFT, RelativeLayout.TRUE);
-        passwordParams.topMargin = 200;
+        passwordParams.topMargin = 450;
 
         fieldParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
-        fieldParams.addRule(RelativeLayout.RIGHT_OF, password.getId());
-        fieldParams.topMargin = 150;
+
+        fieldParams.leftMargin = 230;
+        fieldParams.topMargin = 370;
 
         pwAlgorithm = new PasswordAlgorithm();
         passwordField = new EditText(context);
@@ -63,13 +64,14 @@ public class PasswordStrengthMeter extends RelativeLayout
         barParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
         pwBar.setLayoutParams(barParams);
-        barParams.addRule(RelativeLayout.BELOW, password.getId());
-        barParams.topMargin = 100;
+       // barParams.addRule(RelativeLayout.BELOW, password.getId());
+        barParams.topMargin = 650;
+
 
         buttonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
 
-        buttonParams.topMargin = 500;
+        buttonParams.topMargin = 850;
         buttonParams.rightMargin = 500;
         buttonParams.leftMargin = 500;
 

@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity
     RelativeLayout.LayoutParams editUserNameParams;
     PasswordStrengthMeter passwordStrengthMeter;
     RelativeLayout.LayoutParams meterParams;
-
+    InputFeedback inputFeedback;
     EditText editUserName;
     TextView userName;
 
@@ -27,7 +27,10 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
 
-        userName = new TextView(this);
+
+        linearLayout = new LinearLayout(this);
+        inputFeedback = new InputFeedback(this);
+        /*userName = new TextView(this);
         userName.setText("Username");
         userName.setId(1);
         editUserName = new EditText(this);
@@ -55,9 +58,8 @@ public class MainActivity extends AppCompatActivity
 
         relativeLayout.addView(userName, userNameParams);
         relativeLayout.addView(editUserName, editUserNameParams);
-        relativeLayout.addView(passwordStrengthMeter);
-
-        linearLayout.addView(relativeLayout, relativeParams);
+        relativeLayout.addView(passwordStrengthMeter);*/
+        linearLayout.addView(inputFeedback);
         setContentView(linearLayout);
 
     }
