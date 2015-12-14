@@ -10,7 +10,8 @@ import android.widget.EditText;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.RelativeLayout;
-import android.widget.Button;
+
+import android.text.method.PasswordTransformationMethod;
 import android.view.Gravity;
 /**
  * Created by einarsandberg on 2015-12-02.
@@ -18,16 +19,17 @@ import android.view.Gravity;
 public class PasswordStrengthMeter extends RelativeLayout
 {
     private static final String TAG = "PasswordStrengthMeter";
-    EditText passwordField;
+    EditText editPassword;
     TextView password;
     Context context;
     RelativeLayout.LayoutParams fieldParams;
     RelativeLayout.LayoutParams passwordParams;
     RelativeLayout.LayoutParams barParams;
-    RelativeLayout.LayoutParams buttonParams;
+
     private PasswordStrengthBar pwBar;
     private PasswordAlgorithmInterface pwAlgorithm;
-    Button button;
+    private String validPassword;
+
     public PasswordStrengthMeter(Context theContext)
     {
         super(theContext);
@@ -38,8 +40,7 @@ public class PasswordStrengthMeter extends RelativeLayout
     }
     public void init()
     {
-        button = new Button(context);
-        button.setText("Submit");
+        validPassword = "";
         password = new TextView(context);
         password.setText("Password");
         password.setId(5);
@@ -50,34 +51,28 @@ public class PasswordStrengthMeter extends RelativeLayout
         passwordParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
         passwordParams.addRule(RelativeLayout.ALIGN_LEFT, RelativeLayout.TRUE);
-        passwordParams.topMargin = 450;
+        passwordParams.topMargin = 500;
 
         fieldParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
 
         fieldParams.leftMargin = 230;
-        fieldParams.topMargin = 370;
+        fieldParams.topMargin = 420;
 
         pwAlgorithm = new PasswordAlgorithm();
-        passwordField = new EditText(context);
-        passwordField.setLayoutParams(fieldParams);
+        editPassword = new EditText(context);
+        editPassword.setLayoutParams(fieldParams);
+        editPassword.setTransformationMethod(new PasswordTransformationMethod());
         barParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
         pwBar.setLayoutParams(barParams);
        // barParams.addRule(RelativeLayout.BELOW, password.getId());
-        barParams.topMargin = 650;
-
-
-        buttonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        buttonParams.topMargin = 850;
-        buttonParams.rightMargin = 500;
-        buttonParams.leftMargin = 500;
+        barParams.topMargin = 700;
 
 
 
-        passwordField.addTextChangedListener(new TextWatcher() {
+
+        editPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -90,6 +85,15 @@ public class PasswordStrengthMeter extends RelativeLayout
                 pwBar.setBar(pwAlgorithm.getStrengthLevel(s.toString()),
                         pwAlgorithm.getProgress(pwAlgorithm.getStrengthLevel(s.toString())));
                 Log.d(TAG, pwAlgorithm.getStrengthLevel(s.toString()));
+                if (!pwAlgorithm.getStrengthLevel(s.toString()).equals("Too short"))
+                {
+                    validPassword = s.toString();
+                }
+                else
+                {
+                    validPassword = "";
+                }
+
             }
 
             @Override
@@ -98,9 +102,12 @@ public class PasswordStrengthMeter extends RelativeLayout
             }
         });
         addView(password, passwordParams);
-        addView(passwordField, fieldParams);
+        addView(editPassword, fieldParams);
         addView(pwBar, barParams);
-        addView(button, buttonParams);
+    }
+    public String getValidPassword()
+    {
+        return validPassword;
     }
 
 }
