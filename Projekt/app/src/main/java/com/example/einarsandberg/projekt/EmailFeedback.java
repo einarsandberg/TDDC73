@@ -15,7 +15,7 @@ public class EmailFeedback
         emailAlgorithm = new EmailAlgorithm();
         context = theContext;
     }
-    private boolean isEmailValid(String email)
+    public boolean isEmailValid(String email)
     {
         if (emailAlgorithm.checkEmail(email))
             return true;

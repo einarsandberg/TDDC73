@@ -1,5 +1,5 @@
 package com.example.einarsandberg.projekt;
-
+import android.util.Log;
 /**
  * Created by einarsandberg on 2015-12-11.
  */
@@ -10,6 +10,7 @@ package com.example.einarsandberg.projekt;
 public class EmailAlgorithm implements EmailAlgorithmInterface
 {
 
+    private static final String TAG = "EmailAlgorithm";
     public EmailAlgorithm()
     {
 
@@ -35,9 +36,12 @@ public class EmailAlgorithm implements EmailAlgorithmInterface
         {
             for (int i = 0; i < abc.length(); i++)
             {
-                if (afterAtChar.endsWith("." + abc.charAt(i)))
+
+                if (afterAtChar.contains("." + abc.charAt(i)))
                 {
-                    stringEnd = afterAtChar.substring(afterAtChar.lastIndexOf(".") + 1);
+
+                    stringEnd = afterAtChar.substring(afterAtChar.lastIndexOf(".") + 1, afterAtChar.length());
+                    Log.d(TAG, stringEnd);
                     if (stringEnd.length() > 1)
                     {
                         validEmail = true;

@@ -1,24 +1,28 @@
 package com.example.einarsandberg.projekt;
 
+import android.graphics.Color;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.content.Context;
 import android.widget.TextView;
-
+import android.util.Log;
 /**
  * Created by einarsandberg on 2015-12-11.
  */
 public class InputFeedback extends RelativeLayout
 {
     Context context;
+    private final static String TAG = "InputFeedback";
     RelativeLayout.LayoutParams relativeParams;
     RelativeLayout.LayoutParams emailParams;
     RelativeLayout.LayoutParams editEmailParams;
     RelativeLayout.LayoutParams addressParams;
     RelativeLayout.LayoutParams editAddressParams;
     PasswordStrengthMeter passwordStrengthMeter;
-
+    EmailFeedback emailFeedback;
 
     EditText editEmail;
     TextView email;
@@ -28,11 +32,13 @@ public class InputFeedback extends RelativeLayout
     {
         super(theContext);
         context = theContext;
-        initComponents();
+        init();
         initLayout();
-
     }
-    private void initComponents()
+
+
+
+    private void init()
     {
         email = new TextView(context);
         email.setText("Email");
@@ -46,6 +52,33 @@ public class InputFeedback extends RelativeLayout
         editAddress.setId(4);
 
         passwordStrengthMeter = new PasswordStrengthMeter(context);
+        emailFeedback = new EmailFeedback(context);
+        editEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
+                if (emailFeedback.isEmailValid(s.toString()))
+                {
+                    editEmail.setBackgroundColor(Color.WHITE);
+                }
+                else
+                {
+                    editEmail.setBackgroundColor(Color.parseColor("#ff6666"));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
     }
     private void initLayout()
     {
