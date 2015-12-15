@@ -26,36 +26,25 @@ public class InputFeedback extends RelativeLayout
     Context context;
     private final static String TAG = "InputFeedback";
     RelativeLayout.LayoutParams relativeParams;
-    RelativeLayout.LayoutParams emailParams;
-    RelativeLayout.LayoutParams editEmailParams;
-    RelativeLayout.LayoutParams addressParams;
-    RelativeLayout.LayoutParams editAddressParams;
     RelativeLayout.LayoutParams buttonParams;
     PasswordStrengthMeter passwordStrengthMeter;
-    EmailFeedback emailFeedback;
-    AddressFeedback addressFeedback;
 
     List<TextView> textViewList;
     List<EditText> editTextList;
+    List<Boolean> fieldState;
     List<LayoutParams> layoutTextViewList;
     List<LayoutParams> layoutEditTextList;
     private int lastTextViewTopMargin;
     private int lastEditTextTopMargin;
 
     List<AccountParameter> params;
-    private int lastParameterPosition;
     private final static int MARGIN_TOP_BETWEEN_TEXTVIEW = 250;
     private final static int MARGIN_TOP_BETWEEN_EDITTEXT = 250;
     private final static int LEFT_MARGIN_EDITTEXT = 200;
-
-    EditText editEmail;
-    TextView email;
-    TextView address;
-    EditText editAddress;
     Button button;
-    private boolean validEmail;
-    private boolean validAddress;
-    private boolean validPassword;
+
+    private AlgorithmFactory algorithmFactory;
+
     public InputFeedback(Context theContext, List<AccountParameter> theParams)
     {
         super(theContext);
@@ -66,13 +55,16 @@ public class InputFeedback extends RelativeLayout
         params = theParams;
         init();
         initLayout();
-
-
     }
 
     private void init()
     {
-
+        fieldState = new ArrayList<Boolean>();
+        for (int i = 0; i < params.size(); i++)
+        {
+            fieldState.add(false);
+        }
+        algorithmFactory = new AlgorithmFactory();
         textViewList = new ArrayList<TextView>();
         editTextList = new ArrayList<EditText>();
         layoutTextViewList = new ArrayList<LayoutParams>();
@@ -85,74 +77,50 @@ public class InputFeedback extends RelativeLayout
             Log.d(TAG, params.get(i).toString());
             editTextList.add(new EditText(context));
         }
-        validEmail = false;
-        validAddress = false;
-        validPassword = false;
         button = new Button(context);
         button.setText("Register");
-        email = new TextView(context);
-        email.setText("Email");
-        email.setId(1);
-        editEmail = new EditText(context);
-        editEmail.setId(2);
-        address = new TextView(context);
-        address.setText("Address");
-        address.setId(3);
-        editAddress = new EditText(context);
-        editAddress.setId(4);
 
         passwordStrengthMeter = new PasswordStrengthMeter(context);
-        emailFeedback = new EmailFeedback(context);
-        addressFeedback = new AddressFeedback();
-        editEmail.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count)
+        for (int i = 0; i < params.size(); i++)
+        {
+            // wont work inside onTextChanged if not final
+            final int k = i;
+            // if there is an algorithm for this field
+            if (params.get(k).hasAlgorithm())
             {
-                if (emailFeedback.isEmailValid(s.toString()))
-                {
-                    editEmail.setBackgroundColor(Color.parseColor("#99cc00"));
-                    validEmail = true;
-                }
-                else
-                {
-                    editEmail.setBackgroundColor(Color.parseColor("#ff6666"));
-                    validEmail = false;
-                }
+                params.get(k).setAlgorithmInterface(algorithmFactory.getAlgorithm(params.get(k).getName()));
+                editTextList.get(k).addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after)
+                    {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count)
+                    {
+                        if (params.get(k).getFieldAlgorithmInterface().checkField(s.toString()))
+                        {
+                            Log.d(TAG, "HEJJJ IF");
+                            editTextList.get(k).setBackgroundColor(Color.parseColor("#99cc00"));
+                        }
+                        else
+                        {
+                            Log.d(TAG, "HEJ ELSE");
+                            editTextList.get(k).setBackgroundColor(Color.parseColor("#ff6666"));
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
             }
+        }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        editAddress.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (addressFeedback.isAddressValid(s.toString())) {
-                    editAddress.setBackgroundColor(Color.parseColor("#99cc00"));
-                    validAddress = true;
-                } else {
-                    editAddress.setBackgroundColor(Color.parseColor("#ff6666"));
-                    validAddress = false;
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+      /*
 
         button.setOnClickListener(new OnClickListener() {
             @Override
@@ -163,8 +131,7 @@ public class InputFeedback extends RelativeLayout
                     account.print();
                 }
             }
-        });
-       // initLayout();
+        });*/
 
     }
     private void initLayout()
@@ -193,34 +160,6 @@ public class InputFeedback extends RelativeLayout
             addView(editTextList.get(i));
         }
 
-
-
-        /*emailParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        emailParams.addRule(RelativeLayout.ALIGN_LEFT, RelativeLayout.TRUE);
-        emailParams.topMargin = 50;
-
-        editEmailParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-       // editEmailParams.topMargin = 50;
-        editEmailParams.leftMargin = 200;
-
-        addressParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-
-        addressParams.topMargin = 300;
-        addressParams.addRule(RelativeLayout.ALIGN_LEFT, RelativeLayout.TRUE);
-
-
-        editAddressParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        editAddressParams.topMargin = 250;
-        editAddressParams.leftMargin = 200;*/
-
         buttonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
 
@@ -228,11 +167,6 @@ public class InputFeedback extends RelativeLayout
         buttonParams.rightMargin = 500;
         buttonParams.leftMargin = 500;
 
-
-       /* addView(email, emailParams);
-        addView(editEmail, editEmailParams);
-        addView(address, addressParams);*
-        addView(editAddress, editAddressParams);*/
         addView(passwordStrengthMeter);
         addView(button, buttonParams);
 

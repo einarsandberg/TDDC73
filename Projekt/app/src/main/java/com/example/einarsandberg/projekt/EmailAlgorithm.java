@@ -7,7 +7,7 @@ import android.util.Log;
 
     Checks for "@" and if it ends with .SOMETHING (at least two chars)
  */
-public class EmailAlgorithm implements EmailAlgorithmInterface
+public class EmailAlgorithm implements FieldAlgorithmInterface
 {
 
     private static final String TAG = "EmailAlgorithm";
@@ -15,8 +15,8 @@ public class EmailAlgorithm implements EmailAlgorithmInterface
     {
 
     }
-
-    public boolean checkEmail(String email)
+    @Override
+    public boolean checkField(String email)
     {
         boolean containsAtChar = false;
         boolean validEmail = false;

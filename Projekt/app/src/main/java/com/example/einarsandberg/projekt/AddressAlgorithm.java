@@ -7,14 +7,14 @@ package com.example.einarsandberg.projekt;
 /*
     Checks if there is a street number included in the string
  */
-public class AddressAlgorithm implements AddressAlgorithmInterface
+public class AddressAlgorithm implements FieldAlgorithmInterface
 {
     public AddressAlgorithm()
     {
 
     }
-
-    public boolean checkAddress(String address)
+    @Override
+    public boolean checkField(String address)
     {
         for (int i = 0; i < address.length(); i++)
         {
