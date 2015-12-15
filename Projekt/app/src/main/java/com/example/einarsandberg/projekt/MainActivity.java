@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.RelativeLayout;
-import android.widget.Toolbar;
-import android.widget.Button;
+import java.util.List;
+import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
 {
     LinearLayout linearLayout;
@@ -29,7 +29,11 @@ public class MainActivity extends AppCompatActivity
 
 
         linearLayout = new LinearLayout(this);
-        inputFeedback = new InputFeedback(this);
+        List<AccountParameter> paramList = new ArrayList<AccountParameter>();
+        paramList.add(new AccountParameter("Email"));
+        paramList.add(new AccountParameter("Address"));
+
+        inputFeedback = new InputFeedback(this, paramList);
         /*userName = new TextView(this);
         userName.setText("Username");
         userName.setId(1);
