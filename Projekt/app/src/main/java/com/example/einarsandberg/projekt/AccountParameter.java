@@ -6,8 +6,6 @@ package com.example.einarsandberg.projekt;
 public class AccountParameter
 {
     private String text;
-    private int positionX;
-    private int positionY;
     private FieldAlgorithmInterface fieldAlgorithmInterface;
     private VisualizationMethod visualizationMethod;
     private boolean algorithmState;
@@ -35,7 +33,10 @@ public class AccountParameter
 
     public boolean hasAlgorithm()
     {
-        return algorithmState;
+        if (fieldAlgorithmInterface != null)
+            return true;
+
+        return false;
     }
 
     public void setVisualizationMethod(VisualizationMethod theVisualizationMethod)

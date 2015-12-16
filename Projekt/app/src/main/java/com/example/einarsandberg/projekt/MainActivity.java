@@ -15,16 +15,18 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
 
-
+        AlgorithmFactory algorithmFactory = new AlgorithmFactory();
         linearLayout = new LinearLayout(this);
-        List<AccountParameter> paramList = new ArrayList<AccountParameter>();
-        paramList.add(new AccountParameter("Email"));
-        paramList.add(new AccountParameter("Address"));
-        paramList.add(new AccountParameter("Password"));
-        paramList.get(0).setAlgorithmState(true);
-        paramList.get(1).setAlgorithmState(true);
-        paramList.get(2).setAlgorithmState(true);
-        inputFeedback = new InputFeedback(this, paramList);
+        List<AccountParameter> params = new ArrayList<AccountParameter>();
+        params.add(new AccountParameter("Email"));
+        params.add(new AccountParameter("Address"));
+        params.add(new AccountParameter("Name"));
+        params.add(new AccountParameter("Password"));
+        params.get(0).setAlgorithm(algorithmFactory.getAlgorithm(params.get(0).getName()));
+
+        params.get(1).setAlgorithm(algorithmFactory.getAlgorithm(params.get(1).getName()));
+        params.get(3).setAlgorithm(algorithmFactory.getAlgorithm(params.get(3).getName()));
+        inputFeedback = new InputFeedback(this, params);
 
         linearLayout.addView(inputFeedback);
         setContentView(linearLayout);

@@ -24,13 +24,11 @@ public class InputFeedback extends RelativeLayout
     private final static String TAG = "InputFeedback";
     RelativeLayout.LayoutParams relativeParams;
     RelativeLayout.LayoutParams buttonParams;
-    RelativeLayout.LayoutParams barParams;
-    PasswordStrengthBar pwBar;
+
     List<TextView> textViewList;
-    List<EditText> editTextList;
     List<LayoutParams> layoutTextViewList;
     List<LayoutParams> layoutEditTextList;
-
+    List<LayoutParams> layoutFeedbackList;
     private int lastTextViewTopMargin;
     private int lastEditTextTopMargin;
 
@@ -39,8 +37,10 @@ public class InputFeedback extends RelativeLayout
     private final static int MARGIN_TOP_BETWEEN_EDITTEXT = 250;
     private final static int LEFT_MARGIN_EDITTEXT = 200;
     private final static String PASSWORD_VISUALIZATION_TYPE = "ProgressBar";
-    private final static String TEXTFIELD_VISUALIZATION_TYPE = "FieldColorFeedback";
+    private final static String TEXTFIELD_VISUALIZATION_TYPE = "TextFeedback";
     Button button;
+
+    List<InteractiveField> interactiveFields;
 
     private AlgorithmFactory algorithmFactory;
     private VisualizationFactory visualizationFactory;
@@ -61,100 +61,45 @@ public class InputFeedback extends RelativeLayout
     {
         algorithmFactory = new AlgorithmFactory();
         visualizationFactory = new VisualizationFactory();
-        pwBar = new PasswordStrengthBar(context, null, android.R.attr.progressBarStyleHorizontal);
-        pwBar.setBar("Too short", 20);
+
         textViewList = new ArrayList<TextView>();
-        editTextList = new ArrayList<EditText>();
+
         layoutTextViewList = new ArrayList<LayoutParams>();
         layoutEditTextList = new ArrayList<LayoutParams>();
+        interactiveFields = new ArrayList<InteractiveField>();
+        initVisualizationTypes();
 
         for (int i = 0; i < params.size(); i++)
         {
             textViewList.add(new TextView(context));
             textViewList.get(i).setText(params.get(i).getName());
-            Log.d(TAG, params.get(i).toString());
-            editTextList.add(new EditText(context));
+
+            interactiveFields.add(new InteractiveField(context, params.get(i)));
+
             if (params.get(i).getName().equals("Password"))
             {
-                editTextList.get(i).setTransformationMethod(new PasswordTransformationMethod());
+                interactiveFields.get(i).setTransformationMethod(new PasswordTransformationMethod());
             }
         }
         button = new Button(context);
         button.setText("Register");
-
-        addTextListeners();
-
-      /*
-
-        button.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (validAddress && validEmail && !passwordStrengthMeter.getValidPassword().equals("")) {
-                    Account account = new Account(editEmail.getText().toString(), editAddress.getText().toString(),
-                            passwordStrengthMeter.getValidPassword());
-                    account.print();
-                }
-            }
-        });*/
-
     }
-    private void addTextListeners()
+    private void initVisualizationTypes()
     {
         for (int i = 0; i < params.size(); i++)
         {
-            // wont work inside onTextChanged if not final
-            final int k = i;
-            // if there is an algorithm for this field
-            if (params.get(k).hasAlgorithm())
+            if (params.get(i).hasAlgorithm())
             {
-                params.get(k).setAlgorithm(algorithmFactory.getAlgorithm(params.get(k).getName()));
-                if (params.get(k).getName().equals("Password"))
+                if (params.get(i).getName().equals("Password"))
                 {
-                    params.get(k).setVisualizationMethod(visualizationFactory.getVisualizationMethod(context,
+                    params.get(i).setVisualizationMethod(visualizationFactory.getVisualizationMethod(context,
                             PASSWORD_VISUALIZATION_TYPE));
                 }
                 else
                 {
-                    params.get(k).setVisualizationMethod(visualizationFactory.getVisualizationMethod(context,
+                    params.get(i).setVisualizationMethod(visualizationFactory.getVisualizationMethod(context,
                             TEXTFIELD_VISUALIZATION_TYPE));
                 }
-                editTextList.get(k).addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after)
-                    {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count)
-                    {
-                        if (params.get(k).getFieldAlgorithm().checkField(s.toString()))
-                        {
-                            Log.d(TAG, "HEJ PÅ LILLA DIG");
-                            // editTextList.get(k).setBackgroundColor(Color.parseColor("#99cc00"));
-                            editTextList.get(k).setBackgroundColor(
-                                    params.get(k).getVisualizationMethod().getGoodFeedback());
-                        }
-                        else
-                        {
-                            editTextList.get(k).setBackgroundColor(
-                                    params.get(k).getVisualizationMethod().getBadFeedback());
-
-                        }
-
-                        if (params.get(k).getName().equals("Password"))
-                        {
-                            params.get(k).getVisualizationMethod().setBar(params.get(k).getFieldAlgorithm().getStrengthLevel(s.toString()),
-                                    params.get(k).getFieldAlgorithm().getProgress(
-                                            params.get(k).getFieldAlgorithm().getStrengthLevel(s.toString())));
-                        }
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
             }
         }
     }
@@ -165,9 +110,6 @@ public class InputFeedback extends RelativeLayout
 
         this.setLayoutParams(relativeParams);
 
-        barParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        barParams.topMargin = 700;
 
         for (int i = 0; i < textViewList.size(); i++)
         {
@@ -182,20 +124,22 @@ public class InputFeedback extends RelativeLayout
             layoutEditTextList.add(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
             layoutEditTextList.get(i).leftMargin = LEFT_MARGIN_EDITTEXT;
             layoutEditTextList.get(i).topMargin = lastEditTextTopMargin;
-            editTextList.get(i).setLayoutParams(layoutEditTextList.get(i));
-            lastEditTextTopMargin = lastEditTextTopMargin + MARGIN_TOP_BETWEEN_EDITTEXT;
-            barParams.topMargin = lastEditTextTopMargin;
-            addView(textViewList.get(i));
-            addView(editTextList.get(i));
+            interactiveFields.get(i).setLayoutParams(layoutEditTextList.get(i));
 
-           try
+            lastEditTextTopMargin = lastEditTextTopMargin + MARGIN_TOP_BETWEEN_EDITTEXT;
+            if (interactiveFields.get(i).getAccountParameter().hasAlgorithm())
             {
-                addView(params.get(i).getVisualizationMethod().getView(), barParams);
+                interactiveFields.get(i).getAccountParameter().getVisualizationMethod().
+                        setPosition(lastEditTextTopMargin + 7);
             }
-            catch(Exception e)
+            addView(textViewList.get(i));
+            addView(interactiveFields.get(i));
+
+            if (interactiveFields.get(i).getAccountParameter().hasAlgorithm())
             {
-                e.printStackTrace();
+                addView(interactiveFields.get(i).getAccountParameter().getVisualizationMethod().getView());
             }
+
         }
 
         buttonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,

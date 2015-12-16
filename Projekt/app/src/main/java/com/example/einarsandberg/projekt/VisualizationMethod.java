@@ -6,10 +6,11 @@ import android.view.View;
 public interface VisualizationMethod
 {
     void init();
-    int getGoodFeedback();
-    int getBadFeedback();
-    void setBar(String text, int progress);
+
     View getView();
+    void setFeedback(boolean state);
+    void setFeedback(String theText, int theProgress);
+    void setPosition(int topMargin);
 
 
 }

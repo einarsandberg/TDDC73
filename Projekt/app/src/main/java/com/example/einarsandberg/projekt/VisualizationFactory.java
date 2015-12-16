@@ -10,9 +10,10 @@ public class VisualizationFactory
         if (visualizationType.equals("ProgressBar"))
             return new PasswordStrengthBar(theContext, null, android.R.attr.progressBarStyleHorizontal);
 
-        else if (visualizationType.equals("FieldColorFeedback"))
+
+        else if (visualizationType.equals("TextFeedback"))
         {
-            return new FieldColorFeedback(theContext);
+            return new TextFeedback(theContext);
         }
         return null;
     }
