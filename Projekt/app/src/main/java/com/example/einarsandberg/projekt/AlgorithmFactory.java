@@ -13,6 +13,9 @@ public class AlgorithmFactory
         else if (algorithmType.equals("Address"))
             return new AddressAlgorithm();
 
+        else if (algorithmType.equals("Password"))
+            return new PasswordAlgorithm();
+
         return null;
     }
 }

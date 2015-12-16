@@ -18,7 +18,7 @@ A password is 0 if: <7 characters
 States determine whether there already is an equal character before,
 i.e password will not be stronger just by adding more numbers or characters etc;
  */
-public class PasswordAlgorithm implements PasswordAlgorithmInterface
+public class PasswordAlgorithm implements FieldAlgorithmInterface
 {
     private List<String> strengthLevels;
     boolean caseState;
@@ -33,7 +33,13 @@ public class PasswordAlgorithm implements PasswordAlgorithmInterface
         strengthLevels.add("Strong");
         strengthLevels.add("Very strong");
     }
+    public boolean checkField(String password)
+    {
+        if (!getStrengthLevel(password).equals("Too short"))
+            return true;
 
+        return false;
+    }
     public String getStrengthLevel(String password)
     {
         caseState = false;

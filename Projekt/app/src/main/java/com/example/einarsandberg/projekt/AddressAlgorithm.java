@@ -25,4 +25,12 @@ public class AddressAlgorithm implements FieldAlgorithmInterface
         }
         return false;
     }
+    public String getStrengthLevel(String address)
+    {
+        return "";
+    }
+    public int getProgress(String address)
+    {
+        return 0;
+    }
 }

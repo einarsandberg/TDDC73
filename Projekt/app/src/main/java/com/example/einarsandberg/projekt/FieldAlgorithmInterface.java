@@ -7,4 +7,8 @@ public interface FieldAlgorithmInterface
 {
     boolean checkField(String fieldText);
 
+    String getStrengthLevel(String fieldText);
+
+    int getProgress(String fieldText);
+
 }

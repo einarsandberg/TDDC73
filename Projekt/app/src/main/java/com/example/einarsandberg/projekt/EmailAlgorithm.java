@@ -52,4 +52,13 @@ public class EmailAlgorithm implements FieldAlgorithmInterface
         }
         return validEmail;
     }
+
+    public String getStrengthLevel(String email)
+    {
+        return "";
+    }
+    public int getProgress(String email)
+    {
+        return 0;
+    }
 }

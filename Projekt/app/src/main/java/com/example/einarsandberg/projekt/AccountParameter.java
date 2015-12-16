@@ -9,6 +9,7 @@ public class AccountParameter
     private int positionX;
     private int positionY;
     private FieldAlgorithmInterface fieldAlgorithmInterface;
+    private VisualizationMethod visualizationMethod;
     private boolean algorithmState;
     public AccountParameter(String theText)
     {
@@ -18,11 +19,11 @@ public class AccountParameter
     {
         return text;
     }
-    public void setAlgorithmInterface(FieldAlgorithmInterface theFieldAlgorithmInterface)
+    public void setAlgorithm(FieldAlgorithmInterface theFieldAlgorithmInterface)
     {
         fieldAlgorithmInterface = theFieldAlgorithmInterface;
     }
-    public FieldAlgorithmInterface getFieldAlgorithmInterface()
+    public FieldAlgorithmInterface getFieldAlgorithm()
     {
         return fieldAlgorithmInterface;
     }
@@ -35,6 +36,15 @@ public class AccountParameter
     public boolean hasAlgorithm()
     {
         return algorithmState;
+    }
+
+    public void setVisualizationMethod(VisualizationMethod theVisualizationMethod)
+    {
+        visualizationMethod = theVisualizationMethod;
+    }
+    public VisualizationMethod getVisualizationMethod()
+    {
+        return visualizationMethod;
     }
 
 }

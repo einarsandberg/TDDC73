@@ -3,12 +3,13 @@ import android.content.Context;
 import android.widget.ProgressBar;
 import android.util.*;
 import android.graphics.*;
-import android.widget.*;
 import android.util.Log;
+import android.widget.EditText;
+import android.view.View;
 /**
  * Created by einarsandberg on 2015-12-02.
  */
-public class PasswordStrengthBar extends ProgressBar
+public class PasswordStrengthBar extends ProgressBar implements VisualizationMethod
 {
     private static final String TAG = "PasswordStrengthBar";
     Context context;
@@ -19,6 +20,7 @@ public class PasswordStrengthBar extends ProgressBar
     {
         super(theContext, attrs, defStyle);
         context = theContext;
+        text = "Too short";
         init();
     }
     public void init()
@@ -30,7 +32,6 @@ public class PasswordStrengthBar extends ProgressBar
     @Override
     protected void onDraw(Canvas canvas)
     {
-        Log.d(TAG, text);
         super.onDraw(canvas);
         setProgress(progress);
         canvas.drawText(text, 100, 100, paint);
@@ -44,8 +45,23 @@ public class PasswordStrengthBar extends ProgressBar
 
     public void setBar(String theText, int theProgress)
     {
+        invalidate();
         text = theText;
         progress = theProgress;
+    }
+    // Should not be implemented
+    public int getGoodFeedback()
+    {
+        return 0;
+    }
+    // Should not be implemented
+    public int getBadFeedback()
+    {
+        return 0;
+    }
+    public View getView()
+    {
+        return this;
     }
 
 }
