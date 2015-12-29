@@ -46,6 +46,7 @@ public class PasswordAlgorithm implements FieldAlgorithmInterface
         numberState = false;
         symbolState = false;
         int strengthLevel = 0;
+
         if (password.length() < 7)
             return strengthLevels.get(strengthLevel);
 
@@ -116,4 +117,5 @@ public class PasswordAlgorithm implements FieldAlgorithmInterface
         }
         return 0;
     }
+
 }

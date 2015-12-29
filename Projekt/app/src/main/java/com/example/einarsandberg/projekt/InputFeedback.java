@@ -130,7 +130,7 @@ public class InputFeedback extends RelativeLayout
             if (interactiveFields.get(i).getAccountParameter().hasAlgorithm())
             {
                 interactiveFields.get(i).getAccountParameter().getVisualizationMethod().
-                        setPosition(lastEditTextTopMargin + 7);
+                        setPosition(lastEditTextTopMargin - 90);
             }
             addView(textViewList.get(i));
             addView(interactiveFields.get(i));
@@ -145,9 +145,9 @@ public class InputFeedback extends RelativeLayout
         buttonParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
 
-        buttonParams.topMargin = 900;
-        buttonParams.rightMargin = 500;
-        buttonParams.leftMargin = 500;
+        buttonParams.topMargin = lastEditTextTopMargin + 20;
+        buttonParams.rightMargin = 400;
+        buttonParams.leftMargin = 400;
 
         //addView(pwBar);
         addView(button, buttonParams);
