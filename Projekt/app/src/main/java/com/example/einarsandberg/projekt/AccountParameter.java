@@ -47,5 +47,15 @@ public class AccountParameter
     {
         return visualizationMethod;
     }
+    public boolean getStatus()
+    {
+        if (hasAlgorithm())
+        {
+            if (visualizationMethod.getFeedback()) // if feedback is ok
+                return true;
+        }
+
+        return false;
+    }
 
 }

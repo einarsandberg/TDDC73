@@ -19,11 +19,11 @@ public class PasswordStrengthBar extends ProgressBar implements VisualizationMet
     Paint paint;
     private int progress;
     RelativeLayout.LayoutParams layoutParams;
+    boolean state;
     public PasswordStrengthBar(Context theContext, AttributeSet attrs, int defStyle)
     {
         super(theContext, attrs, defStyle);
         context = theContext;
-
         init();
     }
     public void init()
@@ -32,6 +32,7 @@ public class PasswordStrengthBar extends ProgressBar implements VisualizationMet
         paint.setTextSize(50);
         paint.setColor(Color.BLUE);
         text = "Too short";
+        state = false;
     }
     @Override
     protected void onDraw(Canvas canvas)
@@ -52,13 +53,20 @@ public class PasswordStrengthBar extends ProgressBar implements VisualizationMet
         invalidate();
         text = theText;
         progress = theProgress;
+        // should be valid for all algorithm states except if password too short
+        if (progress > 20)
+        {
+            state = true;
+        }
+        else
+            state = false;
     }
     public View getView()
     {
         return this;
     }
     //should not be implemented
-    public void setFeedback(boolean state)
+    public void setFeedback(boolean theState)
     {
 
     }
@@ -68,6 +76,10 @@ public class PasswordStrengthBar extends ProgressBar implements VisualizationMet
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.topMargin = topMargin;
         this.setLayoutParams(layoutParams);
+    }
+    public boolean getFeedback()
+    {
+        return state;
     }
 
 }

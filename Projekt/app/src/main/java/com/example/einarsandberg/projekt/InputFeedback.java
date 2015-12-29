@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 
 import android.text.style.BackgroundColorSpan;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.content.Context;
@@ -15,6 +16,8 @@ import android.widget.Button;
 import java.util.ArrayList;
 import java.util.List;
 import android.text.method.PasswordTransformationMethod;
+import android.widget.Toast;
+
 /**
  * Created by einarsandberg on 2015-12-11.
  */
@@ -83,6 +86,21 @@ public class InputFeedback extends RelativeLayout
         }
         button = new Button(context);
         button.setText("Register");
+
+        // Display toast
+        button.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<String> badFields = new ArrayList<String>();
+                for (int i = 0; i < interactiveFields.size(); i++) {
+                    if (!interactiveFields.get(i).getAccountParameter().getStatus())
+                    {
+                        badFields.add(interactiveFields.get(i).getAccountParameter().getName());
+                    }
+                }
+                displayToast(badFields);
+            }
+        });
     }
     private void initVisualizationTypes()
     {
@@ -151,5 +169,32 @@ public class InputFeedback extends RelativeLayout
 
         //addView(pwBar);
         addView(button, buttonParams);
+    }
+    public void displayToast(List<String> badFields)
+    {
+        String text;
+        if (badFields.size() > 0)
+        {
+            text = "Error in ";
+            for (int i = 0; i < badFields.size(); i++)
+            {
+                if (i < badFields.size() - 1)
+                {
+                    text+= badFields.get(i) + " and ";
+                }
+                else // if last one, no "and"
+                {
+                    text += badFields.get(i);
+                }
+            }
+        }
+        else
+        {
+            text = "Account successfully created";
+        }
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+
     }
 }

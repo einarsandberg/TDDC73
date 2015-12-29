@@ -14,6 +14,7 @@ public class TextFeedback extends TextView implements VisualizationMethod
 {
     Context context;
     String text;
+    boolean state;
     private static final String VALID = "Valid";
     private static final String UNVALID = "Unvalid";
     RelativeLayout.LayoutParams layoutParams;
@@ -33,9 +34,9 @@ public class TextFeedback extends TextView implements VisualizationMethod
         setBackgroundColor(Color.parseColor("#ff6666"));
         text = UNVALID;
     }
-    public void setFeedback(boolean state)
+    public void setFeedback(boolean theState)
     {
-        //invalidate();
+        state = theState;
         if (state)
         {
             setBackgroundColor(Color.parseColor("#99cc00"));
@@ -60,6 +61,10 @@ public class TextFeedback extends TextView implements VisualizationMethod
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.topMargin = topMargin;
         this.setLayoutParams(layoutParams);
+    }
+    public boolean getFeedback()
+    {
+        return state;
     }
 
 

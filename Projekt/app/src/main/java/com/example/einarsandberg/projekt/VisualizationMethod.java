@@ -10,6 +10,7 @@ public interface VisualizationMethod
     View getView();
     void setFeedback(boolean state);
     void setFeedback(String theText, int theProgress);
+    boolean getFeedback();
     void setPosition(int topMargin);
 
 
