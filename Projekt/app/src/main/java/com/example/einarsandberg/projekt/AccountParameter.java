@@ -53,9 +53,13 @@ public class AccountParameter
         {
             if (visualizationMethod.getFeedback()) // if feedback is ok
                 return true;
+
+            else
+                return false;
         }
 
-        return false;
+        // if no algorithm
+        return true;
     }
 
 }
