@@ -19,13 +19,11 @@ public class MainActivity extends AppCompatActivity
         linearLayout = new LinearLayout(this);
         List<AccountParameter> params = new ArrayList<AccountParameter>();
         params.add(new AccountParameter("Email"));
-        /*params.add(new AccountParameter("Name"));
-        params.add(new AccountParameter("TJOHEJ"));*/
+      //  params.add(new AccountParameter("Name"));
+        /*params.add(new AccountParameter("TJOHEJ"));*/
         params.add(new AccountParameter("Address"));
         params.add(new AccountParameter("Password"));
-       /* params.add(new AccountParameter("Name"));
-        params.add(new AccountParameter("TJOHEJ"));
-        params.add(new AccountParameter("Halloj"));*/
+       // params.add(new AccountParameter("Name"));
         for (int i = 0; i < params.size(); i++)
         {
             try
