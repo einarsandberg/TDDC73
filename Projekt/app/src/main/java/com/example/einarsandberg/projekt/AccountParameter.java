@@ -1,7 +1,17 @@
 package com.example.einarsandberg.projekt;
 
+import com.example.einarsandberg.projekt.InputFeedback.Algorithm.FieldAlgorithmInterface;
+import com.example.einarsandberg.projekt.InputFeedback.Visualization.VisualizationMethod;
+
 /**
  * Created by einarsandberg on 2015-12-15.
+ */
+
+/**
+ * Contains an account parameter with it's input feedback visualization method, as well as the algorithm,
+ * if the user has specified that he/she wants to use input feedback.
+ *
+ * An account consists of a list of AccountParameter.
  */
 public class AccountParameter
 {

@@ -3,8 +3,16 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import android.content.Context;
+
+import com.example.einarsandberg.projekt.InputFeedback.Visualization.VisualizationMethod;
+
 /**
  * Created by einarsandberg on 2015-12-16.
+ */
+
+/**
+ * An interactive field consisting of the correct AccountParameter (say name, address or email),
+ * and the feedback VisualizationMethod (if there is one).
  */
 public class InteractiveField extends EditText
 {
